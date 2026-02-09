@@ -23,12 +23,12 @@ class Level {
     this.ts = tileSize;
 
     // Start position in grid coordinates (row/col).
-    // We compute this by scanning for tile value 2. 
+    // We compute this by scanning for tile value 2.
     this.start = this.findStart();
 
     // Optional: if you don't want the start tile to remain "special"
     // after you’ve used it to spawn the player, you can normalize it
-    // to floor so it draws like floor and behaves like floor. 
+    // to floor so it draws like floor and behaves like floor.
     if (this.start) {
       this.grid[this.start.r][this.start.c] = 0;
     }
@@ -74,7 +74,7 @@ class Level {
   // ----- Start-finding -----
 
   findStart() {
-    // Scan entire grid to locate the tile value 2 (start). 
+    // Scan entire grid to locate the tile value 2 (start).
     for (let r = 0; r < this.rows(); r++) {
       for (let c = 0; c < this.cols(); c++) {
         if (this.grid[r][c] === 2) {
@@ -104,22 +104,16 @@ class Level {
         const v = this.grid[r][c];
 
         // Base tile fill
-        if (v === 1) fill(30, 50, 60);
+        if (v === 1) fill(59, 12, 102);
         else fill(232);
 
         rect(c * this.ts, r * this.ts, this.ts, this.ts);
 
-        // Goal highlight overlay (only on tile 3). 
+        // Goal highlight overlay (only on tile 3).
         if (v === 3) {
           noStroke();
-          fill(255, 200, 120, 200);
-          rect(
-            c * this.ts + 4,
-            r * this.ts + 4,
-            this.ts - 8,
-            this.ts - 8,
-            6
-          );
+          fill(102, 12, 96, 200);
+          rect(c * this.ts + 4, r * this.ts + 4, this.ts - 8, this.ts - 8, 6);
         }
       }
     }
