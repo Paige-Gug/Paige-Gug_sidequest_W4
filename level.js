@@ -88,6 +88,95 @@ class Level {
     return null;
   }
 
+  // Find the goal tile (value 3) in the grid.
+  findGoal() {
+    for (let r = 0; r < this.rows(); r++) {
+      for (let c = 0; c < this.cols(); c++) {
+        if (this.grid[r][c] === 3) return { r, c };
+      }
+    }
+    return null;
+  }
+
+  // Compute a shortest path (BFS) from `start` to `goal`.
+  // Returns an array of {r,c} positions including start and goal, or null.
+  findPath(start, goal) {
+    if (!start || !goal) return null;
+
+    const startKey = `${start.r},${start.c}`;
+    const goalKey = `${goal.r},${goal.c}`;
+
+    const q = [start];
+    const visited = new Set([startKey]);
+    const parent = {}; // key -> parentKey
+
+    const dirs = [
+      { r: -1, c: 0 },
+      { r: 1, c: 0 },
+      { r: 0, c: -1 },
+      { r: 0, c: 1 },
+    ];
+
+    while (q.length > 0) {
+      const cur = q.shift();
+      const curKey = `${cur.r},${cur.c}`;
+
+      if (curKey === goalKey) break;
+
+      for (const d of dirs) {
+        const nr = cur.r + d.r;
+        const nc = cur.c + d.c;
+        const nKey = `${nr},${nc}`;
+
+        if (!this.inBounds(nr, nc)) continue;
+        if (visited.has(nKey)) continue;
+        // Treat walls (1) as impassable, but allow goal (3).
+        const v = this.grid[nr][nc];
+        if (v === 1) continue;
+
+        visited.add(nKey);
+        parent[nKey] = curKey;
+        q.push({ r: nr, c: nc });
+      }
+    }
+
+    // If goal wasn't reached, return null.
+    if (!visited.has(goalKey)) return null;
+
+    // Reconstruct path from goal back to start.
+    const path = [];
+    let key = goalKey;
+    while (key) {
+      const [rs, cs] = key.split(",").map((s) => parseInt(s, 10));
+      path.push({ r: rs, c: cs });
+      if (key === startKey) break;
+      key = parent[key];
+    }
+
+    path.reverse();
+    return path;
+  }
+
+  // Pick a random tile along the shortest path (excluding start & goal)
+  // and turn it into a wall (1). No-op if no path or path too short.
+  addRandomBlockOnPath() {
+    const goal = this.findGoal();
+    if (!this.start || !goal) return;
+
+    const path = this.findPath(this.start, goal);
+    if (!path || path.length <= 2) return; // nothing to block
+
+    // Choose a random index excluding endpoints.
+    const idx = Math.floor(Math.random() * (path.length - 2)) + 1;
+    const p = path[idx];
+
+    // Only place a block if it's currently floor (0) to avoid
+    // accidentally overwriting special tiles.
+    if (this.grid[p.r][p.c] === 0) {
+      this.grid[p.r][p.c] = 1;
+    }
+  }
+
   // ----- Drawing -----
 
   draw() {

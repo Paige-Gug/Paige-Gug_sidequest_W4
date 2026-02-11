@@ -7,12 +7,13 @@ GBDA302 Week 4 Example 4: layable Maze (JSON + Level class + Player class)
 ## Authors
 
 Karen Cochrane and David Han
+/ Paige Gugeler
 
 ---
 
 ## Description
 
-Based on example 3, creates and positions the player using preloads and loadJSON files.
+Based on example 3, creates and positions the player using preloads and loadJSON files. The player then can use the arrow keys to navigate through the game and try to reach the final target square.
 
 ---
 
@@ -41,5 +42,7 @@ N/A
 ## GenAI
 
 The code was written by Dr. Karen Cochrane and David Han but they used GenAI to write the comments.
+
+Gen AI was used to develop additional levels and obstacles.
 
 ---

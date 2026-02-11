@@ -107,6 +107,11 @@ function loadLevel(idx) {
     player.setCell(1, 1);
   }
 
+  // Add a random blocking tile along the path from start to goal.
+  // This modifies the level grid so each time the level loads a new
+  // random block appears on the path.
+  level.addRandomBlockOnPath();
+
   // Ensure the canvas matches this level’s dimensions.
   resizeCanvas(level.pixelWidth(), level.pixelHeight());
 }
